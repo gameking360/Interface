@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interface.Components;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Interface
 {
@@ -32,6 +33,11 @@ namespace Interface
             {
                 Console.WriteLine(chave.KeyCode);
             }
+        }
+
+        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
