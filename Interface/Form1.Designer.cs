@@ -39,6 +39,7 @@
             this.buttonNovo = new System.Windows.Forms.Button();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.Status = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -171,10 +172,20 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1464, 590);
             this.tableLayoutPanel1.TabIndex = 12;
             // 
+            // Status
+            // 
+            this.Status.AutoSize = true;
+            this.Status.Location = new System.Drawing.Point(12, 686);
+            this.Status.Name = "Status";
+            this.Status.Size = new System.Drawing.Size(0, 16);
+            this.Status.TabIndex = 13;
+            this.Status.Click += new System.EventHandler(this.label1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1482, 753);
+            this.Controls.Add(this.Status);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.buttonEquipe);
             this.Controls.Add(this.buttonCompilar);
@@ -185,6 +196,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonNovo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
@@ -208,6 +220,7 @@
         private System.Windows.Forms.Button buttonEquipe;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label Status;
     }
 }
 
