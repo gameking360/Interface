@@ -58,29 +58,39 @@ namespace Interface.Components
             var g = e.Graphics;
             var font = _target.Font;
             var metrics = g.MeasureString("0", font);
-            if (_target.Lines.Length > 1)
+            int lineHeight = (int)metrics.Height;
+            int totalLines = _target.GetLineFromCharIndex(_target.TextLength) + 1;
+            int firstVisibleLine = GetFirstVisibleLine(_target);
+            int lastVisibleLine = totalLines - 1;
+            // Estima o último visível
+            for (int i = firstVisibleLine; i < totalLines; i++)
             {
-                int firstLineIdx = _target.GetFirstCharIndexFromLine(0);
-                int secondLineIdx = _target.GetFirstCharIndexFromLine(1);
-                lineHeight = _target.GetPositionFromCharIndex(secondLineIdx).Y - _target.GetPositionFromCharIndex(firstLineIdx).Y;
+                int charIdx = _target.GetFirstCharIndexFromLine(i);
+                Point pos = charIdx >= 0 ? _target.GetPositionFromCharIndex(charIdx) : new Point(0, (i - firstVisibleLine) * lineHeight);
+                if (pos.Y > _target.ClientSize.Height)
+                {
+                    lastVisibleLine = i;
+                    break;
+                }
             }
-            else
+            for (int i = firstVisibleLine; i <= lastVisibleLine; i++)
             {
-                lineHeight = (int)metrics.Height;
-            }
-            if (lineHeight <= 0) lineHeight = (int)metrics.Height;
-            int visibleLines = Math.Max(_target.ClientSize.Height / lineHeight, 1);
-            int firstLine = GetFirstVisibleLine(_target);
-            int lineLeft = this.Width - 2;
-            for (int i = 0; i < visibleLines && (firstLine + i) < _target.Lines.Length; i++)
-            {
-                string str = (firstLine + i + 1).ToString();
-                int length = str.Length;
-                int charIndex = _target.GetFirstCharIndexFromLine(firstLine + i);
-                Point pos = _target.GetPositionFromCharIndex(charIndex);
-                int py = pos.Y - _target.GetPositionFromCharIndex(_target.GetCharIndexFromPosition(new Point(0, 0))).Y;
+                int charIdx = _target.GetFirstCharIndexFromLine(i);
+                Point pos;
+                if (charIdx >= 0)
+                    pos = _target.GetPositionFromCharIndex(charIdx);
+                else
+                {
+                    // Linha vazia, calcula posição manualmente
+                    int y0 = 0;
+                    if (firstVisibleLine < totalLines && _target.GetFirstCharIndexFromLine(firstVisibleLine) >= 0)
+                        y0 = _target.GetPositionFromCharIndex(_target.GetFirstCharIndexFromLine(firstVisibleLine)).Y;
+                    pos = new Point(0, y0 + (i - firstVisibleLine) * lineHeight);
+                }
+                string str = (i + 1).ToString();
                 SizeF numSize = g.MeasureString(str, font);
                 int px = (int)((this.Width - numSize.Width) / 2);
+                int py = pos.Y;
                 g.DrawString(str, font, new SolidBrush(myColor), px, py);
             }
             g.DrawLine(new Pen(myColor), this.Width - 1, 0, this.Width - 1, this.Height);
