@@ -14,9 +14,31 @@ namespace Interface.Components
 
         private const int EM_SETMARGINS = 0xD3;
         private const int EC_LEFTMARGIN = 0x1;
+        private const int WM_VSCROLL = 0x115;
+        private const int WM_MOUSEWHEEL = 0x20A;
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
+        private class RichTextBoxScrollListener : NativeWindow
+        {
+            private readonly Control _invalidateTarget;
+            public RichTextBoxScrollListener(RichTextBox rtb, Control invalidateTarget)
+            {
+                _invalidateTarget = invalidateTarget;
+                AssignHandle(rtb.Handle);
+            }
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == WM_VSCROLL || m.Msg == WM_MOUSEWHEEL)
+                {
+                    _invalidateTarget.Invalidate();
+                }
+                base.WndProc(ref m);
+            }
+        }
+
+        private RichTextBoxScrollListener _scrollListener;
 
         public NumberedBorder(RichTextBox target)
         {
@@ -43,6 +65,7 @@ namespace Interface.Components
                 SetLeftMargin();
                 this.Invalidate();
             };
+            _scrollListener = new RichTextBoxScrollListener(_target, this);
         }
 
         private void SetLeftMargin()
