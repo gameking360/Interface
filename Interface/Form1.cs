@@ -28,6 +28,42 @@ namespace Interface
             tecladoService = new TecladoService(richTextBox2,this, fileDialog);
             InitializeFunctions();
             caminho = "";
+            // Adiciona handler para customizar o splitter
+            this.splitContainer1.Paint += SplitContainer1_Paint;
+        }
+
+        private void SplitContainer1_Paint(object sender, PaintEventArgs e)
+        {
+            var sc = sender as SplitContainer;
+            if (sc.Orientation == Orientation.Horizontal)
+            {
+                int splitterWidth = sc.SplitterWidth;
+                int x = sc.SplitterRectangle.X;
+                int y = sc.SplitterRectangle.Y;
+                int width = sc.SplitterRectangle.Width;
+                int height = sc.SplitterRectangle.Height;
+                int centerX = x + width / 2;
+                int centerY = y + height / 2;
+                // Desenha pontos no centro do splitter
+                for (int i = -2; i <= 2; i++)
+                {
+                    e.Graphics.FillEllipse(SystemBrushes.ControlDarkDark, centerX - 15 + i * 7, centerY - 3, 4, 4);
+                }
+            }
+            else
+            {
+                int splitterHeight = sc.SplitterWidth;
+                int x = sc.SplitterRectangle.X;
+                int y = sc.SplitterRectangle.Y;
+                int width = sc.SplitterRectangle.Width;
+                int height = sc.SplitterRectangle.Height;
+                int centerX = x + width / 2;
+                int centerY = y + height / 2;
+                for (int i = -2; i <= 2; i++)
+                {
+                    e.Graphics.FillEllipse(SystemBrushes.ControlDarkDark, centerX - 3, centerY - 15 + i * 7, 4, 4);
+                }
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -84,11 +120,18 @@ namespace Interface
 
         public void Copiar()
         {
+            if (this.richTextBox1.Text == null || this.richTextBox1.SelectedText == "") {
+                return; 
+            }
             Clipboard.SetText(this.richTextBox1.SelectedText);
         }
 
         public void Recortar()
         {
+            if (this.richTextBox1.Text == null || this.richTextBox1.SelectedText == "")
+            {
+                return;
+            }
             string textoAnterior = this.richTextBox1.Text;
             string recortado = this.richTextBox1.SelectedText;
             int pos = this.richTextBox1.SelectionStart;
