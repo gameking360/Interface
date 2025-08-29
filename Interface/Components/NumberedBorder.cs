@@ -27,7 +27,7 @@ namespace Interface.Components
             this.Width = FixedWidth;
             this.Height = _target.ClientSize.Height;
             this.Location = new Point(0, 0); // Fixa na parede esquerda
-            this.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            this.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             _target.Controls.Add(this);
             SetLeftMargin();
