@@ -154,7 +154,7 @@
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.ReadOnly = true;
             this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.richTextBox2.Size = new System.Drawing.Size(1464, 263);
+            this.richTextBox2.Size = new System.Drawing.Size(1464, 271);
             this.richTextBox2.TabIndex = 11;
             this.richTextBox2.Text = "";
             this.richTextBox2.WordWrap = false;
@@ -165,9 +165,13 @@
             this.splitContainer1.Location = new System.Drawing.Point(12, 93);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // Panel1
+            // 
+            // splitContainer1.Panel1
+            // 
             this.splitContainer1.Panel1.Controls.Add(this.richTextBox1);
-            // Panel2
+            // 
+            // splitContainer1.Panel2
+            // 
             this.splitContainer1.Panel2.Controls.Add(this.richTextBox2);
             this.splitContainer1.Size = new System.Drawing.Size(1464, 590);
             this.splitContainer1.SplitterDistance = 315;
@@ -200,11 +204,12 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Compilador";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

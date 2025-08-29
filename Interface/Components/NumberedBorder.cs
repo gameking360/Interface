@@ -25,37 +25,24 @@ namespace Interface.Components
             this.Parent = _target;
             this.BackColor = _target.BackColor;
             this.Width = FixedWidth;
+            this.Height = _target.ClientSize.Height;
             this.Location = new Point(0, 0); // Fixa na parede esquerda
             this.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             _target.Controls.Add(this);
             SetLeftMargin();
-            UpdateHeight();
             _target.Resize += (s, e) => {
+                this.Height = _target.ClientSize.Height;
                 this.Location = new Point(0, 0);
                 SetLeftMargin();
-                UpdateHeight();
                 this.Invalidate();
             };
             _target.VScroll += (s, e) => this.Invalidate();
             _target.TextChanged += (s, e) => {
                 this.Location = new Point(0, 0);
                 SetLeftMargin();
-                UpdateHeight();
                 this.Invalidate();
             };
-        }
-
-        private void UpdateHeight()
-        {
-            using (var g = _target.CreateGraphics())
-            {
-                var font = _target.Font;
-                var metrics = g.MeasureString("0", font);
-                int totalLines = Math.Max(_target.Lines.Length, 1);
-                int totalHeight = (int)(metrics.Height * totalLines);
-                this.Height = Math.Max(_target.ClientSize.Height, totalHeight);
-            }
         }
 
         private void SetLeftMargin()
@@ -71,20 +58,29 @@ namespace Interface.Components
             var g = e.Graphics;
             var font = _target.Font;
             var metrics = g.MeasureString("0", font);
-            int lineHeightLocal = (int)metrics.Height;
-            int visibleLines = Math.Max(_target.ClientSize.Height / lineHeightLocal, 1);
-            int firstLine = GetFirstVisibleLine(_target);
-            int maxLines = Math.Max(_target.Lines.Length, firstLine + visibleLines);
-            // Exibe até 999 linhas numeradas
-            int lastLine = Math.Max(maxLines, 999);
-            for (int i = 0; i < visibleLines; i++)
+            if (_target.Lines.Length > 1)
             {
-                int lineNumber = firstLine + i + 1;
-                if (lineNumber > lastLine) break;
-                string str = lineNumber.ToString();
+                int firstLineIdx = _target.GetFirstCharIndexFromLine(0);
+                int secondLineIdx = _target.GetFirstCharIndexFromLine(1);
+                lineHeight = _target.GetPositionFromCharIndex(secondLineIdx).Y - _target.GetPositionFromCharIndex(firstLineIdx).Y;
+            }
+            else
+            {
+                lineHeight = (int)metrics.Height;
+            }
+            if (lineHeight <= 0) lineHeight = (int)metrics.Height;
+            int visibleLines = Math.Max(_target.ClientSize.Height / lineHeight, 1);
+            int firstLine = GetFirstVisibleLine(_target);
+            int lineLeft = this.Width - 2;
+            for (int i = 0; i < visibleLines && (firstLine + i) < _target.Lines.Length; i++)
+            {
+                string str = (firstLine + i + 1).ToString();
+                int length = str.Length;
+                int charIndex = _target.GetFirstCharIndexFromLine(firstLine + i);
+                Point pos = _target.GetPositionFromCharIndex(charIndex);
+                int py = pos.Y - _target.GetPositionFromCharIndex(_target.GetCharIndexFromPosition(new Point(0, 0))).Y;
                 SizeF numSize = g.MeasureString(str, font);
                 int px = (int)((this.Width - numSize.Width) / 2);
-                int py = i * lineHeightLocal;
                 g.DrawString(str, font, new SolidBrush(myColor), px, py);
             }
             g.DrawLine(new Pen(myColor), this.Width - 1, 0, this.Width - 1, this.Height);
