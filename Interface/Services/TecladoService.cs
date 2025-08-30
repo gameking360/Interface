@@ -15,7 +15,6 @@ namespace Interface.Services
         private OpenFileDialog fileDialog;
 
         public TecladoService() { }
-        // Implement keyboard handling methods here
 
         public TecladoService(RichTextBox mensagens, Form1 formulario, OpenFileDialog fileDialog)
         {
