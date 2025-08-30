@@ -108,9 +108,10 @@ namespace Interface
 
         public void Colar(string texto)
         {
+            if (!Clipboard.ContainsText())
+                return;
             string textoAnterior = this.richTextBox1.Text;
             string nova = texto;
-
             int pos = this.richTextBox1.SelectionStart;
             this.richTextBox1.Text = textoAnterior.Insert(pos, nova);
             this.richTextBox1.Focus();
@@ -120,7 +121,7 @@ namespace Interface
 
         public void Copiar()
         {
-            if (this.richTextBox1.Text == null || this.richTextBox1.SelectedText == "") {
+            if (this.richTextBox1.Text == "" || this.richTextBox1.SelectedText == "") {
                 return; 
             }
             Clipboard.SetText(this.richTextBox1.SelectedText);
@@ -169,6 +170,11 @@ namespace Interface
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonCopiar_Click(object sender, EventArgs e)
         {
 
         }
