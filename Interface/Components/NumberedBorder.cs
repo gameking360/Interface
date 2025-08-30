@@ -106,12 +106,11 @@ namespace Interface.Components
             {
                 string str = (firstLine + i + 1).ToString();
                 int charIndex = _target.GetFirstCharIndexFromLine(firstLine + i);
-                if (charIndex == -1) continue; // Linha não visível ou inválida
+                if (charIndex == -1) continue;
                 Point pos = _target.GetPositionFromCharIndex(charIndex);
                 int py = pos.Y - _target.GetPositionFromCharIndex(_target.GetCharIndexFromPosition(new Point(0, 0))).Y;
                 SizeF numSize = g.MeasureString(str, font);
                 int px = (int)((this.Width - numSize.Width) / 2);
-                // Protege contra valores inválidos
                 if (!float.IsNaN(px) && !float.IsNaN(py))
                 {
                     try

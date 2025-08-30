@@ -23,12 +23,10 @@ namespace Interface
         {
             InitializeComponent();
             fileDialog = new OpenFileDialog();
-            // Cria o painel de numeração DENTRO do RichTextBox, colado à direita
             numberedBorder = new NumberedBorder(richTextBox1);
             tecladoService = new TecladoService(richTextBox2,this, fileDialog);
             InitializeFunctions();
             caminho = "";
-            // Adiciona handler para customizar o splitter
             this.splitContainer1.Paint += SplitContainer1_Paint;
         }
 
