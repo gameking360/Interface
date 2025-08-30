@@ -113,6 +113,7 @@
             this.buttonCopiar.Text = "Copiar [ctrl+c]";
             this.buttonCopiar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.buttonCopiar.UseVisualStyleBackColor = true;
+            this.buttonCopiar.Click += new System.EventHandler(this.buttonCopiar_Click);
             // 
             // buttonSalvar
             // 

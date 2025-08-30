@@ -85,7 +85,14 @@ namespace Interface.Components
             {
                 int firstLineIdx = _target.GetFirstCharIndexFromLine(0);
                 int secondLineIdx = _target.GetFirstCharIndexFromLine(1);
-                lineHeight = _target.GetPositionFromCharIndex(secondLineIdx).Y - _target.GetPositionFromCharIndex(firstLineIdx).Y;
+                if (firstLineIdx == -1 || secondLineIdx == -1)
+                {
+                    lineHeight = (int)metrics.Height;
+                }
+                else
+                {
+                    lineHeight = _target.GetPositionFromCharIndex(secondLineIdx).Y - _target.GetPositionFromCharIndex(firstLineIdx).Y;
+                }
             }
             else
             {
@@ -98,13 +105,21 @@ namespace Interface.Components
             for (int i = 0; i < visibleLines && (firstLine + i) < _target.Lines.Length; i++)
             {
                 string str = (firstLine + i + 1).ToString();
-                int length = str.Length;
                 int charIndex = _target.GetFirstCharIndexFromLine(firstLine + i);
+                if (charIndex == -1) continue; // Linha não visível ou inválida
                 Point pos = _target.GetPositionFromCharIndex(charIndex);
                 int py = pos.Y - _target.GetPositionFromCharIndex(_target.GetCharIndexFromPosition(new Point(0, 0))).Y;
                 SizeF numSize = g.MeasureString(str, font);
                 int px = (int)((this.Width - numSize.Width) / 2);
-                g.DrawString(str, font, new SolidBrush(myColor), px, py);
+                // Protege contra valores inválidos
+                if (!float.IsNaN(px) && !float.IsNaN(py))
+                {
+                    try
+                    {
+                        g.DrawString(str, font, new SolidBrush(myColor), px, py);
+                    }
+                    catch { /* ignora erros de desenho */ }
+                }
             }
             g.DrawLine(new Pen(myColor), this.Width - 1, 0, this.Width - 1, this.Height);
         }
