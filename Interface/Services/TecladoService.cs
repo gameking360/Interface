@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interface.Lexico;
 
 namespace Interface.Services
 {
@@ -88,12 +89,43 @@ namespace Interface.Services
 
         private void Compilar()
         {
-            this.messages.Text = "compilação de programas ainda não foi implementada";
+            Lexico.Lexico lexico = new Lexico.Lexico();
+            lexico.setInput(this.formulario.GetTexto());
+            try
+            {
+                Token t = null;
+                while ((t = lexico.nextToken()) != null)
+                {
+                    //System.out.println(t.getLexeme());
+                    Console.WriteLine(t);
+                    // só escreve o lexema, necessário escrever t.getId, t.getPosition()
+
+                    // t.getId () - retorna o identificador da classe (ver Constants.java) 
+                    // necessário adaptar, pois deve ser apresentada a classe por extenso
+
+                    // t.getPosition () - retorna a posição inicial do lexema no editor 
+                    // necessário adaptar para mostrar a linha	
+
+                    // esse código apresenta os tokens enquanto não ocorrer erro
+                    // no entanto, os tokens devem ser apresentados SÓ se não ocorrer erro,
+                    // necessário adaptar para atender o que foi solicitado		   
+                }
+            }
+            catch (LexicalError e)
+            {  // tratamento de erros
+                //System.out.println(e.getMessage() + " em " + e.getPosition());
+                Console.WriteLine(e.Message + " em " + e.getPosition());
+                // e.getMessage() - retorna a mensagem de erro de SCANNER_ERRO (ver ScannerConstants.java)
+                // necessário adaptar conforme o enunciado da parte 2
+
+                // e.getPosition() - retorna a posição inicial do erro 
+                // necessário adaptar para mostrar a linha  
+            }
         }
 
         private void Compilar(Object sender, EventArgs e)
         {
-            this.messages.Text = "compilação de programas ainda não foi implementada";
+            this.Compilar();
         }
 
 
