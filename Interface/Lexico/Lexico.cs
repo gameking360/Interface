@@ -76,6 +76,7 @@ if (token == 0)
     return nextToken();
 else
 {
+    
     string lexeme = input.Substring(start, end);
     token = lookupToken(token, lexeme);
     return new Token(token, lexeme, start);
