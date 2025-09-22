@@ -38,111 +38,141 @@ namespace Interface.Lexico
 
         public Token nextToken()
         {
-        if ( ! hasInput() )
-            return null;
+            if (!hasInput())
+                return null;
 
-        int start = position;
+            // Ignorar comentários de linha
+            if (input.Length - position >= 2 && input[position] == '/' && input[position + 1] == '/')
+            {
+                int idx = input.IndexOf('\n', position);
+                if (idx == -1)
+                {
+                    position = input.Length;
+                }
+                else
+                {
+                    position = idx + 1;
+                }
+                return nextToken();
+            }
+            // Ignorar comentários de bloco
+            if (input.Length - position >= 2 && input[position] == '/' && input[position + 1] == '*')
+            {
+                int idx = input.IndexOf("*/", position + 2);
+                if (idx == -1)
+                {
+                    // Se não encontrar o fechamento, ignora até o final
+                    position = input.Length;
+                }
+                else
+                {
+                    position = idx + 2;
+                }
+                return nextToken();
+            }
 
-        int state = 0;
-        int lastState = 0;
-        int endState = -1;
-        int end = -1;
+            int start = position;
+            int state = 0;
+            int lastState = 0;
+            int endState = -1;
+            int end = -1;
 
-        while (hasInput())
-        {
-            lastState = state;
-            state = nextState(nextChar(), state);
+            while (hasInput())
+            {
+                lastState = state;
+                state = nextState(nextChar(), state);
 
-            if (state< 0)
-                break;
+                if (state < 0)
+                    break;
+                else
+                {
+                    if (tokenForState(state) >= 0)
+                    {
+                        endState = state;
+                        end = position;
+                    }
+                }
+            }
+            if (endState < 0 || (endState != state && tokenForState(lastState) == -2))
+                throw new LexicalError(SCANNER_ERROR[lastState], start);
 
+            position = end;
+
+            int token = tokenForState(endState);
+
+            if (token == 0)
+                return nextToken();
             else
             {
-                if (tokenForState(state) >= 0)
-                {
-                    endState = state;
-                    end = position;
-                }
-}
+                // Protege contra índices inválidos
+                if (start < 0 || end > input.Length || end < start)
+                    return null;
+                string lexeme = input.Substring(start, end - start);
+                token = lookupToken(token, lexeme);
+                return new Token(token, lexeme, start);
+            }
         }
-        if (endState < 0 || (endState != state && tokenForState(lastState) == -2))
-    throw new LexicalError(SCANNER_ERROR[lastState], start);
 
-position = end;
+        private int nextState(char? c, int state)
+        {
+            int start = SCANNER_TABLE_INDEXES[state];
+            int end = SCANNER_TABLE_INDEXES[state + 1] - 1;
 
-int token = tokenForState(endState);
+            while (start <= end)
+            {
+                int half = (start + end) / 2;
 
-if (token == 0)
-    return nextToken();
-else
-{
-    
-    string lexeme = input.Substring(start, end);
-    token = lookupToken(token, lexeme);
-    return new Token(token, lexeme, start);
-}
-    }
+                if (SCANNER_TABLE[half, 0] == c)
+                    return SCANNER_TABLE[half, 1];
+                else if (SCANNER_TABLE[half, 0] < c)
+                    start = half + 1;
+                else  //(SCANNER_TABLE[half][0] > c)
+                    end = half - 1;
+            }
 
-    private int nextState(char? c, int state)
-{
-    int start = SCANNER_TABLE_INDEXES[state];
-    int end = SCANNER_TABLE_INDEXES[state + 1] - 1;
+            return -1;
+        }
 
-    while (start <= end)
-    {
-        int half = (start + end) / 2;
+        private int tokenForState(int state)
+        {
+            if (state < 0 || state >= TOKEN_STATE.Length)
+                return -1;
 
-        if (SCANNER_TABLE[half,0] == c)
-            return SCANNER_TABLE[half,1];
-        else if (SCANNER_TABLE[half, 0] < c)
-            start = half + 1;
-        else  //(SCANNER_TABLE[half][0] > c)
-            end = half - 1;
-    }
+            return TOKEN_STATE[state];
+        }
 
-    return -1;
-}
+        public int lookupToken(int floor, string key)
+        {
+            int start = SPECIAL_CASES_INDEXES[floor];
+            int end = SPECIAL_CASES_INDEXES[floor + 1] - 1;
 
-private int tokenForState(int state)
-{
-    if (state < 0 || state >= TOKEN_STATE.Length)
-        return -1;
+            while (start <= end)
+            {
+                int half = (start + end) / 2;
+                int comp = SPECIAL_CASES_KEYS[half].CompareTo(key);
 
-    return TOKEN_STATE[state];
-}
+                if (comp == 0)
+                    return SPECIAL_CASES_VALUES[half];
+                else if (comp < 0)
+                    start = half + 1;
+                else  //(comp > 0)
+                    end = half - 1;
+            }
 
-public int lookupToken(int floor, string key)
-{
-    int start = SPECIAL_CASES_INDEXES[floor];
-    int end = SPECIAL_CASES_INDEXES[floor + 1] - 1;
+            return floor;
+        }
 
-    while (start <= end)
-    {
-        int half = (start + end) / 2;
-        int comp = SPECIAL_CASES_KEYS[half].CompareTo(key);
+        private bool hasInput()
+        {
+            return position < input.Length;
+        }
 
-        if (comp == 0)
-            return SPECIAL_CASES_VALUES[half];
-        else if (comp < 0)
-            start = half + 1;
-        else  //(comp > 0)
-            end = half - 1;
-    }
-
-    return floor;
-}
-
-private bool hasInput()
-{
-    return position < input.Length;
-}
-
-private char? nextChar()
-{
-    if (hasInput())
-        return input[position++];
-    else
-        return null;
-}
+        private char? nextChar()
+        {
+            if (hasInput())
+                return input[position++];
+            else
+                return null;
+        }
     }
 }
