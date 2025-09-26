@@ -55,10 +55,10 @@ namespace Interface.Lexico
                 }
                 return nextToken();
             }
-            // Ignorar comentários de bloco
-            if (input.Length - position >= 2 && input[position] == '/' && input[position + 1] == '*')
+            // Ignorar comentários de bloco com { }
+            if (input.Length - position >= 1 && input[position] == '{')
             {
-                int idx = input.IndexOf("*/", position + 2);
+                int idx = input.IndexOf('}', position + 1);
                 if (idx == -1)
                 {
                     // Se não encontrar o fechamento, ignora até o final
@@ -66,8 +66,16 @@ namespace Interface.Lexico
                 }
                 else
                 {
-                    position = idx + 2;
+                    position = idx + 1;
                 }
+                return nextToken();
+            }
+            // Ignorar bloco de comentário aberto anteriormente
+            int blocoInicio = input.IndexOf('{', position);
+            int blocoFim = input.IndexOf('}', position);
+            if (blocoInicio != -1 && blocoInicio < blocoFim && position >= blocoInicio && position < blocoFim)
+            {
+                position = blocoFim + 1;
                 return nextToken();
             }
 

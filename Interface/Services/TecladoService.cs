@@ -90,27 +90,22 @@ namespace Interface.Services
         private void Compilar()
         {
             this.messages.Text = "";
-            int linha = 0;
-            Lexico.Lexico lexico = new Lexico.Lexico();            
+            int linha = 1;
+            Lexico.Lexico lexico = new Lexico.Lexico();
             try
             {
-                var linhas = this.formulario.GetTexto().Split('\n');
-                foreach (var line in linhas)
+                string texto = this.formulario.GetTexto();
+                lexico.setInput(texto);
+                Token t = null;
+                while ((t = lexico.nextToken()) != null)
                 {
-                    linha++;
-                    lexico.setInput(line);
-                    Token t = null;
-                    while ((t = lexico.nextToken()) != null)
-                    {
-                        String classe = new CompiladorServices().GetClassePorExtenso(t.getId());
-                        this.messages.AppendText("Linha " + linha + " - " + t.getLexeme() + " ( " + classe + " )\n");
-                    }
+                    int tokenLine = linha + texto.Substring(0, t.getPosition()).Count(c => c == '\n');
+                    String classe = new CompiladorServices().GetClassePorExtenso(t.getId());
+                    this.messages.AppendText("Linha " + tokenLine + " - " + t.getLexeme() + " ( " + classe + " )\n");
                 }
-                
             }
             catch (LexicalError e)
-            {  // tratamento de erros
-               
+            {
                 this.messages.AppendText(linha + ": " + e);
             }
         }
