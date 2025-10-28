@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interface.Lexico
 {
-    public abstract class ScannerConstants
+    public abstract class ScannerConstants : ParserConstants
     {
         public int[] SCANNER_TABLE_INDEXES =
         {
@@ -2115,9 +2115,9 @@ namespace Interface.Lexico
 
         public string[] SCANNER_ERROR =
         {
-        "Caractere n�o esperado",
+        "Símbolo inválido",
         "",
-        "Erro identificando cstring",
+        "constante string inválida",
         "",
         "",
         "",

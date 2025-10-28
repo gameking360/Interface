@@ -31,7 +31,7 @@ namespace Interface.Lexico
 
         public override string ToString()
         {
-            return base.ToString() + ", @ " + position;
+            return this.Message;
         }
     }
 }

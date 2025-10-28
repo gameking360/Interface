@@ -64,6 +64,12 @@
     <Compile Include="Components\NumberedBorder.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Components\NumberedBorder2.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\NumberedBorder2.Designer.cs">
+      <DependentUpon>NumberedBorder2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,8 +80,11 @@
     <Compile Include="Lexico\Constants.cs" />
     <Compile Include="Lexico\LexicalError.cs" />
     <Compile Include="Lexico\Lexico.cs" />
+    <Compile Include="Lexico\ParserConstants.cs" />
     <Compile Include="Lexico\ScannerConstants.cs" />
     <Compile Include="Lexico\SemanticError.cs" />
+    <Compile Include="Lexico\Semantico.cs" />
+    <Compile Include="Lexico\Sintatico.cs" />
     <Compile Include="Lexico\SyntaticError.cs" />
     <Compile Include="Lexico\Token.cs" />
     <Compile Include="Program.cs" />

@@ -15,19 +15,32 @@ namespace Interface
 {
     public partial class Form1 : Form
     {
-        private NumberedBorder numberedBorder;
+        private NumberedBorder2 numberedBorder;
         private TecladoService tecladoService;
         private OpenFileDialog fileDialog;
+         
         private string caminho;
         public Form1()
         {
             InitializeComponent();
+            richTextBox3.ReadOnly = true;                  // impede edição
+            richTextBox3.TabStop = false;                  // impede foco via TAB
+            richTextBox3.Enabled = false;                  // bloqueia cliques e foco
+            richTextBox3.Cursor = Cursors.Default;         // cursor normal (não de texto)
+            richTextBox3.BorderStyle = BorderStyle.None;   // sem borda
+            richTextBox3.BackColor = Color.LightGray;      // cor de fundo da faixa
+            richTextBox3.ScrollBars = RichTextBoxScrollBars.None;  // sem barras de rolagem
+            richTextBox3.Multiline = true;                 // garante múltiplas linhas
+            richTextBox3.WordWrap = false;                 // mantém alinhamento
+
+
             fileDialog = new OpenFileDialog();
-            numberedBorder = new NumberedBorder(richTextBox1);
+            numberedBorder = new NumberedBorder2(richTextBox1,richTextBox3);
             tecladoService = new TecladoService(richTextBox2,this, fileDialog);
             InitializeFunctions();
             caminho = "";
             this.splitContainer1.Paint += SplitContainer1_Paint;
+            this.numberedBorder.AddLineNumbers();
         }
 
         private void SplitContainer1_Paint(object sender, PaintEventArgs e)
@@ -71,8 +84,20 @@ namespace Interface
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            if(e is KeyEventArgs chave)
+            if(this.richTextBox1.Text == "")
             {
+                this.numberedBorder.AddLineNumbers();
+                return;
+            }
+
+
+        }
+
+        private void richTextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter || e.KeyCode == Keys.Delete)
+            {
+                this.numberedBorder.AddLineNumbers();
             }
         }
 

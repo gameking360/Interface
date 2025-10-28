@@ -90,23 +90,44 @@ namespace Interface.Services
         private void Compilar()
         {
             this.messages.Text = "";
-            int linha = 1;
             Lexico.Lexico lexico = new Lexico.Lexico();
+            Sintatico sintatico = new Sintatico();
+            Semantico semantico = new Semantico();
             try
             {
                 string texto = this.formulario.GetTexto();
                 lexico.setInput(texto);
-                Token t = null;
-                while ((t = lexico.nextToken()) != null)
-                {
-                    int tokenLine = linha + texto.Substring(0, t.getPosition()).Count(c => c == '\n');
-                    String classe = new CompiladorServices().GetClassePorExtenso(t.getId());
-                    this.messages.AppendText("Linha " + tokenLine + " - " + t.getLexeme() + " ( " + classe + " )\n");
-                }
+                //Token t = null;
+                //StringBuilder message = new StringBuilder();
+               /// message.AppendLine("Linha         Classe                                                    Lexema");
+               // while ((t = lexico.nextToken()) != null)
+              //  {
+                //    int tokenLine = linha + texto.Substring(0, t.getPosition()).Count(c => c == '\n');
+                 //   String classe = new CompiladorServices().GetClassePorExtenso(t.getId());
+                 //   message.AppendLine(tokenLine  +"         " + "          " +  classe + "                                 " + t.getLexeme());
+               // }
+               // message.AppendLine("\n      programa compilado com sucesso");
+               // this.messages.Text = message.ToString();
+               sintatico.Parse(lexico,semantico);
+                this.messages.Text = "Programa compilado com sucesso!";
             }
+            
             catch (LexicalError e)
             {
-                this.messages.AppendText(linha + ": " + e);
+                this.messages.AppendText("Linha: " + CompiladorServices.GetLinha(this.formulario.GetTexto(),e.getPosition()) + ": " + e + " " + this.formulario.GetTexto()[e.getPosition()]);
+            }
+            catch(SyntaticError ex)
+            {
+
+                this.messages.AppendText($"Linha: {CompiladorServices.GetLinha(this.formulario.GetTexto(),ex.getPosition())} {ex}");
+                // e.getMessage() são os símbolos esperados
+                // e.getMessage() - retorna a mensagem de erro de PARSER_ERROR (ver ParserConstants.java)
+                // necessário adaptar conforme o enunciado da parte 3
+
+            }
+            catch (SemanticError ex)
+            {
+                this.messages.AppendText($"Linha: {CompiladorServices.GetLinha(this.formulario.GetTexto(), ex.getPosition())} {ex}");
             }
         }
 

@@ -39,6 +39,7 @@
             this.buttonNovo = new System.Windows.Forms.Button();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
             this.Status = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -49,15 +50,16 @@
             // richTextBox1
             // 
             this.richTextBox1.AcceptsTab = true;
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.richTextBox1.Location = new System.Drawing.Point(30, 0);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.richTextBox1.Size = new System.Drawing.Size(1464, 315);
+            this.richTextBox1.Size = new System.Drawing.Size(1434, 315);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.WordWrap = false;
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            this.richTextBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBox1_KeyDown);
             // 
             // buttonEquipe
             // 
@@ -169,6 +171,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.richTextBox3);
             this.splitContainer1.Panel1.Controls.Add(this.richTextBox1);
             // 
             // splitContainer1.Panel2
@@ -177,6 +180,15 @@
             this.splitContainer1.Size = new System.Drawing.Size(1464, 590);
             this.splitContainer1.SplitterDistance = 315;
             this.splitContainer1.TabIndex = 20;
+            // 
+            // richTextBox3
+            // 
+            this.richTextBox3.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.ReadOnly = true;
+            this.richTextBox3.Size = new System.Drawing.Size(34, 297);
+            this.richTextBox3.TabIndex = 1;
+            this.richTextBox3.Text = "";
             // 
             // Status
             // 
@@ -230,6 +242,7 @@
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label Status;
+        private System.Windows.Forms.RichTextBox richTextBox3;
     }
 }
 
