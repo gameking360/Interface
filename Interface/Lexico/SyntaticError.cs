@@ -21,8 +21,26 @@ namespace Interface.Lexico
 
         public override string ToString()
         {
+            Func<string,string> verToken = (string x) =>
+            {
+              if(x.Equals("$"))
+                    return "EOF";
+                else
+                {
+                    if(x.Length >= 2)
+                    {
+                        if (x[0].ToString() == "\"" && x[x.Length - 1].ToString() == "\"")
+                            return "constante_string"; 
+
+                    }
+                    return x;
+                }
+                  
+
+            };
+
             var token = this.token.getLexeme();
-            return "encontrado " + ((token == "$") ?"EOF": token) + " " + base.ToString();
+            return "encontrado " + (verToken(token)) + " " + base.ToString();
         }
     }
 }

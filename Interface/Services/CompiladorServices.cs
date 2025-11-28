@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Interface.Lexico;
@@ -69,8 +70,14 @@ namespace Interface.Services
 
         public static int GetLinha(string texto, int position)
         {
-            return 1 + texto.Substring(0, position).Count(c => c == '\n');
+            return 1 + texto.Substring(0, position > 0 ?  position : texto.Length).Count(c => c == '\n');
         }
 
+
+        public static void CompilarESalvarArquivo() { 
+        
+            
+         
+        }
     }
 }

@@ -55,6 +55,7 @@ namespace Interface.Lexico
                 }
                 return nextToken();
             }
+            
             // Ignorar comentários de bloco com { }
             if (input.Length - position >= 1 && input[position] == '{')
             {
@@ -62,13 +63,79 @@ namespace Interface.Lexico
                 if (idx == -1)
                 {
                     // Se não encontrar o fechamento, ignora até o final
-                    position = input.Length;
+
+                   throw new LexicalError("Comentário de bloco não fechado", position);
                 }
+                
                 else
                 {
                     position = idx + 1;
                 }
                 return nextToken();
+            }
+
+            if (input.Count(a => a.Equals('{')) != input.Count(a => a.Equals('}')))
+            {
+                Func<string, int> buscarChaveInvalida = (string valor) =>
+                {
+                    bool dentroAspas = false;
+                    char tipoAspas = '\0';
+                    Stack<int> pilha = new Stack<int>(); // guarda as posições das chaves abertas
+
+                    for (int i = 0; i < valor.Length; i++)
+                    {
+                        char c = valor[i];
+
+                        // Ignora conteúdo dentro de aspas
+                        if (c == '"' || c == '\'')
+                        {
+                            if (!dentroAspas)
+                            {
+                                dentroAspas = true;
+                                tipoAspas = c;
+                            }
+                            else if (tipoAspas == c)
+                            {
+                                dentroAspas = false;
+                                tipoAspas = '\0';
+                            }
+                            continue;
+                        }
+
+                        if (dentroAspas)
+                            continue;
+
+                        // Abre chave
+                        if (c == '{')
+                        {
+                            pilha.Push(i);
+                        }
+                        // Fecha chave
+                        else if (c == '}')
+                        {
+                            if (pilha.Count == 0)
+                            {
+                                // Encontrou uma chave de fechamento sem abertura
+                                return i;
+                            }
+                            pilha.Pop();
+                        }
+                    }
+
+                    // Se sobrou algo na pilha, há chaves abertas sem fechar
+                    if (pilha.Count > 0)
+                    {
+                        return pilha.Peek(); // posição da primeira chave aberta sem fechamento
+                    }
+
+                    return -1; // Tudo balanceado
+                };
+
+
+
+
+                throw new LexicalError("Comentário de bloco não fechado", buscarChaveInvalida(input));
+
             }
             // Ignorar bloco de comentário aberto anteriormente
             int blocoInicio = input.IndexOf('{', position);

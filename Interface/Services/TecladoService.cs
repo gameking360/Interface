@@ -93,6 +93,7 @@ namespace Interface.Services
             Lexico.Lexico lexico = new Lexico.Lexico();
             Sintatico sintatico = new Sintatico();
             Semantico semantico = new Semantico();
+            
             try
             {
                 string texto = this.formulario.GetTexto();
@@ -109,6 +110,7 @@ namespace Interface.Services
                // message.AppendLine("\n      programa compilado com sucesso");
                // this.messages.Text = message.ToString();
                sintatico.Parse(lexico,semantico);
+                this.GerarArquivo(semantico.getConteudo());
                 this.messages.Text = "Programa compilado com sucesso!";
             }
             
@@ -218,6 +220,21 @@ namespace Interface.Services
                     MessageBox.Show("Erro ao abrir o arquivo: " + ex.Message);
                 }
             }
+        }
+
+        private  void GerarArquivo(string conteudo)
+        {
+            string caminhoAtual = this.formulario.GetCaminho();
+            if (caminhoAtual == "")
+            {
+                this.SalvarService();
+                caminhoAtual = this.formulario.GetCaminho();
+            }
+
+            caminhoAtual = caminhoAtual.Substring(0, caminhoAtual.LastIndexOf('.')) + ".il";
+
+            File.WriteAllText(caminhoAtual, conteudo);
+
         }
     }
 }
