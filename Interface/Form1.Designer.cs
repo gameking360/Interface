@@ -50,6 +50,7 @@
             // richTextBox1
             // 
             this.richTextBox1.AcceptsTab = true;
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.Window;
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.richTextBox1.Location = new System.Drawing.Point(30, 0);
             this.richTextBox1.Name = "richTextBox1";

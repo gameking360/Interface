@@ -81,7 +81,7 @@ namespace Interface.Lexico
        new int[] {  20,  39,  50,  42,   3,  40 },
        new int[] {   2, 202,  68 },
        new int[] {   0 },
-       new int[] {  42,   2,  68 },
+       new int[] {  42,   2, 202, 68 },
        new int[] {  37,  52, 203 },
        new int[] {  38,  52, 203 },
        new int[] {   6,  39,  54,  42,  55,  40 },

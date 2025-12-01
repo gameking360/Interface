@@ -171,11 +171,8 @@ namespace Interface.Lexico
 
             var tipo = pilha.Pop();
 
-            var lexema = token.getLexeme();
 
-            switch (lexema)
-            {
-                case "-":
+         
                     if (tipo.Equals("float64"))
                         this.code.AppendLine("ldc.i8 -1.0");
 
@@ -184,10 +181,8 @@ namespace Interface.Lexico
 
                     this.code.AppendLine("mul");
                     pilha.Push(tipo);
-                    break;
-                default:
-                    break;
-            }
+              
+            
         }
 
         private void Operacao(int action)
@@ -195,8 +190,9 @@ namespace Interface.Lexico
             var tipo1 = pilha.Pop();
             var tipo2 = pilha.Pop();
 
+            int ix = 3 ^ 2;
 
-            if ((tipo1 != tipo2) || action == 109)
+            if (tipo1.Equals("float64") || tipo2.Equals("float64") || action == 109)
             {
                 pilha.Push("float64");
 

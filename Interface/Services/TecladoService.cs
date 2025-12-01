@@ -228,8 +228,14 @@ namespace Interface.Services
             if (caminhoAtual == "")
             {
                 this.SalvarService();
+                
                 caminhoAtual = this.formulario.GetCaminho();
             }
+
+            if (string.IsNullOrEmpty(caminhoAtual)) return;
+           if(caminhoAtual.LastIndexOf('.') == -1) caminhoAtual += ".";
+
+
 
             caminhoAtual = caminhoAtual.Substring(0, caminhoAtual.LastIndexOf('.')) + ".il";
 
