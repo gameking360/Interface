@@ -70,8 +70,17 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Lexico\AnalysisError.cs" />
+    <Compile Include="Lexico\Constants.cs" />
+    <Compile Include="Lexico\LexicalError.cs" />
+    <Compile Include="Lexico\Lexico.cs" />
+    <Compile Include="Lexico\ScannerConstants.cs" />
+    <Compile Include="Lexico\SemanticError.cs" />
+    <Compile Include="Lexico\SyntaticError.cs" />
+    <Compile Include="Lexico\Token.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CompiladorServices.cs" />
     <Compile Include="Services\TecladoService.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -135,5 +144,6 @@
   <ItemGroup>
     <None Include="Resources\Equipe.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

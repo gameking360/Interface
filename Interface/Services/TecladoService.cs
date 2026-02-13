@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interface.Lexico;
 
 namespace Interface.Services
 {
@@ -88,12 +89,30 @@ namespace Interface.Services
 
         private void Compilar()
         {
-            this.messages.Text = "compilação de programas ainda não foi implementada";
+            this.messages.Text = "";
+            int linha = 1;
+            Lexico.Lexico lexico = new Lexico.Lexico();
+            try
+            {
+                string texto = this.formulario.GetTexto();
+                lexico.setInput(texto);
+                Token t = null;
+                while ((t = lexico.nextToken()) != null)
+                {
+                    int tokenLine = linha + texto.Substring(0, t.getPosition()).Count(c => c == '\n');
+                    String classe = new CompiladorServices().GetClassePorExtenso(t.getId());
+                    this.messages.AppendText("Linha " + tokenLine + " - " + t.getLexeme() + " ( " + classe + " )\n");
+                }
+            }
+            catch (LexicalError e)
+            {
+                this.messages.AppendText(linha + ": " + e);
+            }
         }
 
         private void Compilar(Object sender, EventArgs e)
         {
-            this.messages.Text = "compilação de programas ainda não foi implementada";
+            this.Compilar();
         }
 
 
